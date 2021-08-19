@@ -1,0 +1,67 @@
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css"/>
+ 
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<style>
+    div.dt-buttons {
+    visibility: hidden;
+}
+</style>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Manage Roles</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <button type="button" onclick="$('.buttons-csv').click()" class="btn btn-sm btn-outline-secondary">CSV</button>
+        <button type="button" onclick="$('.buttons-excel').click()" class="btn btn-sm btn-outline-secondary">Excel</button>
+        <button type="button" onclick="$('.buttons-pdf').click()" class="btn btn-sm btn-outline-secondary">PDF</button>
+        <button type="button" onclick="$('.buttons-print').click()" class="btn btn-sm btn-outline-secondary">Print</button>
+      </div>
+      <a href="/admin/roles/new" class="btn btn-sm btn-outline-secondary">
+        <i class="fa fa-plus"></i>
+        Add New
+      </a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table id="tbl-roles"></table>
+    </div>
+</div>
+<script>
+    $('#tbl-roles').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'csv', 'excel', 'pdf', 'print'
+        ],
+        data: <?-JSON.stringify(roles)?>,
+        lengthChange: false,
+        columns: [
+            { data: 'id', title: 'ID' },
+            { data: 'name', title: 'Name' },
+            { data: row => {
+                return row.global? 'Global':'Entity'
+            }, render: data => `<label class="badge bg-${data == 'Global'? 'secondary': 'info'}">${data}</label>`, title: 'Type' },
+            { data: 'id', render: (id) => {
+                return `<a href="/admin/roles/${id}/edit" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                    <button class="btn btn-outline-danger btn-sm btn-delete" data-id="${id}"><i class="fa fa-times"></i> Delete</button>`;
+            }, title: 'Options' },
+        ]
+    });
+    $(function() {
+        $('.btn-delete').click(function (e){
+            var id = $(this).data('id');
+            confirmAction('Are you sure you want to delete role?', function(){
+                location.href = '/admin/roles/'+ id +'/delete';
+            })
+        })
+    })
+</script>
+<?- include('../../components/confirm_modal') ?>

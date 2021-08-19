@@ -1,0 +1,32 @@
+<div class="modal fade" data-backdrop="false" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabelSmall" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-complete">
+                <h4 class="modal-title" id="box-title">Confirm action</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div id="confirm-modal-content" class="modal-body">
+                Are you sure you want to proceed?
+            </div>
+            <div id="btns-box" class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                <button id="btn-confirm" type="button" class="btn btn-success" data-bs-dismiss="modal"><i class="fa fa-check"></i> Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function confirmAction(message, callback) {
+        var btn = $('#btn-confirm');
+        $(btn).off('click');
+        if (message.length) $('#confirm-modal-content').html(message);
+        else $('#confirm-modal-content').text('Are you sure you want to proceed?');
+        $(btn).one('click', function(e) {
+            callback();
+        });
+        $('#confirm-modal').modal();
+        var modal = new bootstrap.Modal(document.getElementById('confirm-modal'));
+        modal.show();
+    }
+</script>

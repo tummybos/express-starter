@@ -1,0 +1,75 @@
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Manage Roles</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <a href="/admin/roles" class="btn btn-sm btn-outline-secondary">
+        <i class="fa fa-arrow-left"></i>
+        Back
+      </a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form action="" method="POST" enctype="application/x-www-form-urlencoded">
+            <? if(locals.errors && errors.length){
+                ?><div class="alert alert-danger">
+                    <ul><?
+                    errors.forEach(err => { ?>
+                        <li><?=err.msg?></li>
+                <? });
+                    ?></ul>
+                </div><?
+            } ?>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" aria-describedby="name" placeholder="First name" value="<?=locals.role?role.name:''?>">
+            </div>
+
+            <label for="">Role Type:</label><br>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <button class="nav-link <?=locals.role? (role.global == 1? 'active' : '') : 'active'?>" id="global-tab" data-bs-toggle="tab" data-bs-target="#global" type="button" role="tab" aria-controls="global" aria-selected="true">Global Role</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link <?=locals.role? (role.global == 0? 'active' : '') : ''?>" id="entity-tab" data-bs-toggle="tab" data-bs-target="#entity" type="button" role="tab" aria-controls="entity" aria-selected="true">Entity Role</button>
+                </li>
+            </ul>
+            <div class="card p-2 border-top-0">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade <?=locals.role? (role.global == 1? 'show active' : '') : 'show active'?>" id="global" role="tabpanel" aria-labelledby="global-tab">
+                        <?
+                            global_permissions.forEach(p => {
+                        ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="global_permissions" value="<?=p.name?>" id="permission_<?=p.name?>" <?=locals.role && role.permissions.includes(p.name)?'checked':''?>>
+                            <label class="form-check-label" for="permission_<?=p.name?>">
+                            <?=p.name?>
+                            </label>
+                        </div>
+                        <?
+                            })
+                        ?>
+                        <button class="btn btn-success" name="global" value="1"><i class="fa fa-check"></i> Submit</button>
+                    </div>
+                    <div class="tab-pane fade <?=locals.role? (role.global == 0? 'show active' : '') : ''?>" id="entity" role="tabpanel" aria-labelledby="entity-tab">
+                        <?
+                            entity_permissions.forEach(p => {
+                        ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="entity_permissions" value="<?=p.name?>" id="permission_<?=p.name?>" <?=locals.role && role.permissions.includes(p.name)?'checked':''?>>
+                            <label class="form-check-label" for="permission_<?=p.name?>">
+                            <?=p.name?>
+                            </label>
+                        </div>
+                        <?
+                            })
+                        ?>
+                        <button class="btn btn-success" name="global" value="0"><i class="fa fa-check"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+</script>
