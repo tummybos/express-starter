@@ -1,4 +1,5 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
+
 const { sequelize } = require("./lib/db");
 const path = require("path");
 const glob = require("glob");
@@ -15,11 +16,7 @@ const create = async () => {
   const permissions = ["browse_admin", "manage_roles"];
   sequelize
     .sync({ force: true })
-    .then(() =>
-      models.Permission.bulkCreate(
-        permissions.map((p) => ({ name: p, global: 1 }))
-      )
-    )
+    .then(() => models.Permission.bulkCreate(permissions.map((p) => ({ name: p, global: 1 }))))
     .then(() =>
       models.Role.bulkCreate([
         { name: "User", permissions: [], global: 1 },
@@ -81,9 +78,7 @@ NOTE: If you did not request for this, contact the support immediately.
 
 const update = async () => {
   console.log("This script will update the database structure");
-  sequelize
-    .sync({ alter: true })
-    .then(() => console.log("Database Synced Successfully!!!"));
+  sequelize.sync({ alter: true }).then(() => console.log("Database Synced Successfully!!!"));
 };
 
 const argv = process.argv.slice(2);
